@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Parent, Child, Planet, FavoritePlanets
 #from models import Person
 
 app = Flask(__name__)
@@ -44,6 +44,26 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+@app.route('/get-data', methods=['GET'])
+def get_data():
+    parent = Parent.query.get(1)
+    user = User.query.get(1)
+    print(user.planets_favorites)
+    favorite_planets_serialized = []
+    for fav in user.planets_favorites:
+        print(f'({fav.user.serialize()} {fav.planet.serialize()})')
+        favorite_planets_serialized.append(fav.planet.serialize())
+    children_serialized = []
+    for child in parent.children:
+        children_serialized.append(child.serialize())
+    favorite_planets_by_user = FavoritePlanets.query.filter_by(user_id=1).all()
+    for fav_planet in favorite_planets_by_user: 
+        print(fav_planet.planet.serialize())
+    return jsonify({'msg': 'ok',
+                    'parent': parent.serialize(),
+                    'children': children_serialized,
+                    "favorite_planets": favorite_planets_serialized})
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':

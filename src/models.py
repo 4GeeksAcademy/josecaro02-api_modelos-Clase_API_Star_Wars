@@ -14,7 +14,7 @@ class User(db.Model):
     followers = db.relationship('Follow', foreign_keys='Follow.followed_id', back_populates='followed', cascade="all, delete-orphan")
 
     def __repr__(self):
-        return '<User %r>' % self.email
+        return f'user {self.email}'
 
     def serialize(self):
         return {

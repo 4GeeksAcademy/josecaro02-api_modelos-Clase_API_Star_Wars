@@ -60,7 +60,7 @@ def get_data():
     favorite_planets_by_user = FavoritePlanets.query.filter_by(user_id=1).all()
     for fav_planet in favorite_planets_by_user: 
         print(fav_planet.planet.serialize())
-    return jsonify({'msg': 'ok',
+    return jsonify({'msg': 'ok!',
                     'parent': parent.serialize(),
                     'children': children_serialized,
                     "favorite_planets": favorite_planets_serialized})
